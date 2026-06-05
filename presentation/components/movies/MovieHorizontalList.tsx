@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import MoviePoster from "./MoviePoster";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface Props {
   title?: string;
@@ -25,6 +25,12 @@ const MovieHorizontalList = ({
 }: Props) => {
   //1. Candado para evitar el disparo de multiples eventos
   const isLoading = useRef(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      isLoading.current = false;
+    }, 200); // margen de seguridad
+  }, [movies]);
 
   //2. la funcion que evalua la posicion del scroll
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -55,7 +61,8 @@ const MovieHorizontalList = ({
         horizontal
         data={movies}
         showsHorizontalScrollIndicator={false} // Para el diseno limpio
-        keyExtractor={(item) => `${item.id}`}
+        // evitar que crashee por ids repetidos
+        keyExtractor={(item, i) => `${item.id}-${i}`}
         renderItem={({ item }) => (
           <MoviePoster id={item.id} poster={item.poster} smallPoster />
         )}

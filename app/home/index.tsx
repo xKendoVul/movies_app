@@ -34,7 +34,10 @@ const MoviesApp = () => {
 
         <MovieHorizontalList
           title="Mejor Valoradas"
-          movies={topRateQuery.data ?? []}
+          movies={topRateQuery.data?.pages.flat() ?? []}
+          className="mb-5"
+          //conectamos la funcion magica de tanstack para cargar mas
+          loadNextPage={topRateQuery.fetchNextPage}
         />
 
         <MovieHorizontalList
